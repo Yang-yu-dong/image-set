@@ -1,0 +1,13 @@
+{
+    "name": "yangyudong/image-set",
+    "authors": [
+        {
+            "name": "Yang-yu-dong",
+            "email": "youngyudong@foxmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "files": ["ImageSet.php"]
+    }
+}
