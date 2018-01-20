@@ -6,6 +6,6 @@
  * Time: 16:50
  */
 require_once '../ImageSet.php';
-$filename = "test.jpg";
+$filename = "test3.jpg";
 $image = new ImageSet($filename);
-$image->printImage();
+$newImage = $image->resize(0.3)->printImage();

@@ -12,6 +12,7 @@ class ImageSet
     private $width;
     private $height;
     private $imageTag;
+
     public function __construct($filename)
     {
         $img = getimagesize($filename);
@@ -27,31 +28,65 @@ class ImageSet
      **/
     public function checkExt($type)
     {
-        $extArr = ['gif', 'jpg', 'png', 'swf', 'psd', 'bmp', 'tiff', 'tiff', 'jpc', 'jp2', 'jpx', 'swc', 'iff', 'wbmp', 'xbm'];
-        return $extArr[$type - 1];
+        return image_type_to_extension($type, FALSE);
     }
 
     /**
      *输出图像到网页;
      **/
 
-    public function printImage () {
-        header('Content-type:image/'.$this->ext);
+    public function printImage()
+    {
+        header('Content-type:image/' . $this->ext);
         $funcName = $this->concatFunName("image");
         $funcName($this->imageTag);
         return $this;
     }
+
+    /**
+     *裁剪，
+     * startX=>开始位置
+     * startY=>结束位置
+     * width=>裁剪区域宽度
+     * height=>裁剪区域高度
+     **/
+    public function cut($startX, $startY, $width, $height)
+    {
+        $newImage = imagecreatetruecolor($width, $height);
+        imagecopyresized($newImage, $this->imageTag, 0, 0, $startX, $startY, $width, $height, $width, $height);
+        imagedestroy($this->imageTag);
+        $this->imageTag = $newImage;
+        return $this;
+    }
+
+    /**
+     *缩放
+     * pre=>倍数
+     **/
+    public function resize($pre)
+    {
+        $width = $this->width * $pre;
+        $height = $this->height * $pre;
+        $newImage = imagecreatetruecolor($width,$height);
+        imagecopyresized($newImage,$this->imageTag,0,0,0,0,$width,$height,$this->width,$this->height);
+        imagedestroy($this->imageTag);
+        $this->imageTag = $newImage;
+        return $this;
+    }
+
     /**
      *拼接函数名
      **/
-    public function concatFunName($funcName){
+    public function concatFunName($funcName)
+    {
         if ($this->ext === 'jpg') {
-            $funcName.="jpeg";
+            $funcName .= "jpeg";
         } else {
-            $funcName.=$this->ext;
+            $funcName .= $this->ext;
         }
         return $funcName;
     }
+
     public function __destruct()
     {
         // TODO: Implement __destruct() method.
