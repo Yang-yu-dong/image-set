@@ -6,6 +6,6 @@
  * Time: 16:50
  */
 require_once '../ImageSet.php';
-$filename = "test3.jpg";
+$filename = "https://www.baidu.com/img/bd_logo1.png";
 $image = new ImageSet($filename);
-$newImage = $image->resize(0.3)->printImage();
+$newImage = $image->resize(1)->save();
